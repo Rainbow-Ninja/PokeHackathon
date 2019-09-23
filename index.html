@@ -7,12 +7,14 @@
     <title>Poke BreakOut</title>
     <style>
     	* { padding: 0; margin: 50 0 0 0; }
-    	canvas { background: url("https://i.imgur.com/SYY2mJz.png"); background-repeat: no-repeat; background-size: 700px 600px; display: block; margin: 0 auto;}
+    	canvas { background: url("https://i.imgur.com/SYY2mJz.png"); background-repeat: no-repeat; background-size: 700px 600px; display: block; margin: 0 auto; z-index: 0;}
         body { background-color:rgb(180, 231, 106)}
+
     </style>
 </head>
 <body>
     <canvas id="myBoard" width="700" height="600"></canvas>
+
 
 
     <script>
@@ -80,13 +82,21 @@
             pokeApi()
             .then(data => {
                 const dataPoke = data.sprites.front_default;
-                var pokePicture =  document.getElementById("pokePicture");
-                pokePicture.src = dataPoke;
-                pokePicture.width = "200";
+                console.log(dataPoke)
+                ctx.drawImage()
+                picture = new Image();
+                picture.src = `${dataPoke}`;
+                ctx.drawImage(pokeBall , 0 , 0);
+            
+                // var pokePicture =  document.getElementById("pokePicture");
+                // pokePicture.src = dataPoke;
+                // pokePicture.width = "200";
+
 
             })
             .catch(err => console.log(err))
         }
+
 
         // getting image 
         function getBall() {
@@ -103,9 +113,9 @@
 
         // calls everything
         function draw() {
-            getSprite();
+            // getSprite();
             // getBall();
-            drawBricks();    
+            // drawBricks();    
         }
         setInterval(draw, 10);
     
