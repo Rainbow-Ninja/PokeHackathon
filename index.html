@@ -16,63 +16,43 @@
 
 
     <script>
-
-
-        
-        // setting up brick variables
-        var brickRowCount = 13;
-        var brickColumnCount = 9;
-        var brickWidth = 75;
-        var brickHeight = 20;
-        var brickPadding = 1;
-        var brickOffsetTop = 10;
-        var brickOffsetLeft = 10;
-        
-        
-        // this holds the brick in an array
-        var bricks = [];
-        // this creates the spots to hold the bricks rows and columns
-        for(var column=0; column < brickColumnCount; column++) {
-            bricks[column] = [];
-            // we do the same for row
-            for(var row=0; row <brickRowCount; row ++) {
-                bricks[column][row] = { x: 0, y: 0 };
-            }
-        }
-
-
-        function drawBricks() {
-            for(var column = 0; column < brickColumnCount; column++) {
-                for(var row = 0; row < brickRowCount; row++) {
-                    var brickX = (column*(brickWidth+brickPadding))+brickOffsetLeft;
-                    var brickY = (row*(brickHeight+brickPadding))+brickOffsetTop;
-                    bricks[column][row].x = brickX;
-                    bricks[column][row].y = brickY;
-                    ctx.beginPath();
-                    ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                    var my_gradient = ctx.createLinearGradient(0, 0, 0, 170);
-                    my_gradient.addColorStop(0, "#654321");
-                    my_gradient.addColorStop(1, "#56391c");
-                    ctx.fillStyle = my_gradient;
-                    ctx.fill();
-                    ctx.closePath();
-            }
-            }
-        }
-
-
-
         // setting up canvas
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
+
         var ballX = canvas.width/2;
         var ballY = canvas.height-30;
         var horzBallShift = 2;
         var vertBallShift = -2;
         var ballSize = 32;
+        var ashHeight = 10;
+        var ashWidth = 75;
+        var ashStart = (canvas.width-ashWidth) / 2;
+        var rightPressed = false;
+        var leftPressed = false;
 
 
 
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+
+        function keyDownHandler(pressed) {
+            if(pressed.key == "Right" || pressed.key == "ArrowRight") {
+                rightPressed = true;
+            }
+            else if(pressed.key == "Left" || pressed.key == "ArrowLeft") {
+                leftPressed = true;
+            }
+        }
+
+        function keyUpHandler(pressed) {
+            if(pressed.key == "Right" || pressed.key == "ArrowRight") {
+                rightPressed = false;
+            }
+            else if(pressed.key == "Left" || pressed.key == "ArrowLeft") {
+                leftPressed = false;
+            }
+        }
         // grabbing the pokemon Api
         async function pokeApi(){
         // pokemon api has 807 pokemons
@@ -96,22 +76,24 @@
 
         // getting image 
         function getBall() {
-            // const img = new Image();
-            // img.src = './pokeBall.png';
-            // img.onload = () => {
-            // context.drawImage(img, 0, 0);
+            pokeBall = new Image();
+            pokeBall.src = 'pokeBall.png';
+            ctx.drawImage(pokeBall, ballX, ballY);
+        };
+
+        function drawAsh() {
             ctx.beginPath();
-            ctx.arc(50, 50, 10, 0, Math.PI*2);
+            ctx.rect(ashStart, canvas.height-ashHeight, ashWidth, ashHeight);
             ctx.fillStyle = "#0095DD";
             ctx.fill();
             ctx.closePath();
-        };
+        }
+
 
         // calls everything
         function draw() {
-            getSprite();
-            // getBall();
-            drawBricks();    
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // getSprite();
             getBall();
             ballX += horzBallShift;
             ballY += vertBallShift;
@@ -123,7 +105,21 @@
             if(ballY + vertBallShift + ballSize > canvas.height || ballY + vertBallShift < 0) {
                 vertBallShift = -vertBallShift;
             }
+
+            if(rightPressed) {
+                ashStart += 7;
+                if (ashStart + ashWidth > canvas.width){
+                    ashStart = canvas.width - ashWidth;
+                }
+            }
+            else if(leftPressed) {
+                ashStart -= 7;
+                if (ashStart < 0){
+                    ashStart = 0;
+                }
+            }
         }
+        
         setInterval(draw, 10);
     
         draw();
