@@ -12,7 +12,59 @@
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="700" height="600"></canvas>
+    <canvas id="myBoard" width="700" height="600"></canvas>
 
+
+    <script>
+        // setting up canvas
+    	var canvas = document.getElementById("myBoard");
+        var ctx = canvas.getContext("2d");
+        var ballX = canvas.width/2;
+        var ballY = canvas.height-30;
+        var horzBallShift = 2;
+        var vertBallShift = -2;
+
+
+        // grabbing the pokemon Api
+        async function pokeApi(){
+        // pokemon api has 807 pokemons
+        let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${Math.round(Math.random() * 807)}`);
+        let data = await response.json()
+        return data;
+        }
+
+        // function for pokemon sprite
+        function getSprite(){
+            pokeApi()
+            .then(data => {
+                const dataPoke = data.sprites.front_default;
+                var pokePicture =  document.getElementById("pokePicture");
+                pokePicture.src = dataPoke;
+                pokePicture.width = "200";
+
+            })
+            .catch(err => console.log(err))
+        }
+
+        // getting image 
+        function getBall() {
+            pokeBall = new Image();
+            pokeBall.src = 'pokeBall.png';
+            ctx.drawImage(pokeBall, ballX, ballY);
+        };
+
+
+        // calls everything
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            getSprite();
+            getBall();
+            ballX += horzBallShift;
+            ballY += vertBallShift;
+        }
+        setInterval(draw, 10);
+    
+        draw();
+    </script>
 </body>
 </html>
