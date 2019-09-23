@@ -44,16 +44,11 @@
 
         // getting image 
         function getBall() {
-            // const img = new Image();
-            // img.src = './pokeBall.png';
-            // img.onload = () => {
-            // context.drawImage(img, 0, 0);
-            ctx.beginPath();
-            ctx.arc(50, 50, 10, 0, Math.PI*2);
-            ctx.fillStyle = "pokeBall.png";
-            ctx.fill();
-            ctx.closePath();
+            pokeBall = new Image();
+            pokeBall.src = 'pokeBall.png';
+            ctx.drawImage(pokeBall, 0, 0);
         };
+
 
         // calls everything
         function draw() {
