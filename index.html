@@ -67,12 +67,12 @@
         // setting up canvas
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
-
         var ballX = canvas.width/2;
         var ballY = canvas.height-30;
         var horzBallShift = 2;
         var vertBallShift = -2;
         var ballSize = 32;
+
 
 
         // grabbing the pokemon Api
@@ -119,8 +119,9 @@
 
         // calls everything
         function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
             getSprite();
+            // getBall();
+            drawBricks();    
             getBall();
             ballX += horzBallShift;
             ballY += vertBallShift;
