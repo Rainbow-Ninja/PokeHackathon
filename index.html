@@ -18,11 +18,22 @@
     <script>
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
+
+
         function getBall() {
+            const img = new Image();
+            img.src = './pokeBall.gif';
+            img.onload = () => {
+            context.drawImage(img, 0, 0);
+        };
 
         }
+
+        function draw() {
+            getBall();
+        }
     
-    
+        draw();
     </script>
 </body>
 </html>
