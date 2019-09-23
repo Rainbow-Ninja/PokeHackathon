@@ -16,10 +16,33 @@
 
 
     <script>
+        // setting up canvas
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
 
 
+        // grabbing the pokemon Api
+        async function pokeApi(){
+        // pokemon api has 807 pokemons
+        let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${Math.round(Math.random() * 807)}`);
+        let data = await response.json()
+        return data;
+        }
+
+        // function for pokemon sprite
+        function getSprite(){
+            pokeApi()
+            .then(data => {
+                const dataPoke = data.sprites.front_default;
+                var pokePicture =  document.getElementById("pokePicture");
+                pokePicture.src = dataPoke;
+                pokePicture.width = "200";
+
+            })
+            .catch(err => console.log(err))
+        }
+
+        // getting image 
         function getBall() {
             // const img = new Image();
             // img.src = './pokeBall.png';
@@ -32,7 +55,9 @@
             ctx.closePath();
         };
 
+        // calls everything
         function draw() {
+            getSprite();
             getBall();
         }
         setInterval(draw, 10);
