@@ -7,7 +7,7 @@
     <title>Poke BreakOut</title>
     <style>
     	* { padding: 0; margin: 50 0 0 0; }
-    	canvas { background: url("https://i.imgur.com/SYY2mJz.png"); background-repeat: no-repeat; background-size: 700px 600px; display: block; margin: 0 auto;}
+    	canvas { background: url("https://i.imgur.com/SYY2mJz.png"); background-repeat: repeat; background-size: 700px 600px; display: block; margin: 0 auto; }
         body { background-color:rgb(180, 231, 106)}
     </style>
 </head>
@@ -65,6 +65,12 @@
         // setting up canvas
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
+        var ballX = canvas.width/2;
+        var ballY = canvas.height-30;
+        var horzBallShift = 2;
+        var vertBallShift = -2;
+        var ballSize = 32;
+
 
 
         // grabbing the pokemon Api
@@ -106,6 +112,17 @@
             getSprite();
             // getBall();
             drawBricks();    
+            getBall();
+            ballX += horzBallShift;
+            ballY += vertBallShift;
+
+            if(ballX + horzBallShift > canvas.width - ballSize || ballX + horzBallShift < 0) {
+                horzBallShift = -horzBallShift;
+            }
+
+            if(ballY + vertBallShift + ballSize > canvas.height || ballY + vertBallShift < 0) {
+                vertBallShift = -vertBallShift;
+            }
         }
         setInterval(draw, 10);
     
