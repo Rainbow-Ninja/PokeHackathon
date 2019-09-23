@@ -9,19 +9,33 @@
     	* { padding: 0; margin: 50 0 0 0; }
     	canvas { background: url("https://i.imgur.com/SYY2mJz.png"); background-repeat: repeat; background-size: 700px 600px; display: block; margin: 0 auto; }
         body { background-color:rgb(180, 231, 106)}
-
     </style>
 </head>
 <body>
+    <!-- <div style="display:none;">
+        <img id="source"
+                src="https://mdn.mozillademos.org/files/5397/rhino.jpg"
+                width="300" height="227">
+    </div>
+    <canvas id="canvas"></canvas> -->
+
     <canvas id="myBoard" width="700" height="600"></canvas>
 
 
 
     <script>
+        //         const canvas = document.getElementById('canvas');
+        // const ctx = canvas.getContext('2d');
+        // const image = document.getElementById('source');
+        // console.log(image.src)
+
+        // image.addEventListener('load', e => {
+        //   ctx.drawImage(image.src, 33, 71, 104, 124, 21, 20, 87, 104);
+        // });
+
         // setting up canvas
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
-
         var ballX = canvas.width/2;
         var ballY = canvas.height-30;
         var horzBallShift = 2;
@@ -40,11 +54,8 @@
         var brickOffsetTop = 10;
         var brickOffsetLeft = 20;
         
-
-
         document.addEventListener("keydown", keyDownHandler, false);
         document.addEventListener("keyup", keyUpHandler, false);
-
         function keyDownHandler(pressed) {
             if(pressed.key == "Right" || pressed.key == "ArrowRight") {
                 rightPressed = true;
@@ -53,7 +64,6 @@
                 leftPressed = true;
             }
         }
-
         function keyUpHandler(pressed) {
             if(pressed.key == "Right" || pressed.key == "ArrowRight") {
                 rightPressed = false;
@@ -65,31 +75,24 @@
         // grabbing the pokemon Api
         async function pokeApi(){
         // pokemon api has 807 pokemons
-        let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${Math.round(Math.random() * 807)}`);
+        // Math.round(Math.random() * 807)
+        let response = await fetch(`https://pokeapi.co/api/v2/pokemon/ditto/`);
         let data = await response.json()
         return data;
         }
-
         // function for pokemon sprite
         function getSprite(){
             pokeApi()
             .then(data => {
-                const dataPoke = data.sprites.front_default;
+                var dataPoke = data.sprites.front_default;
                 console.log(dataPoke)
-                ctx.drawImage()
-                picture = new Image();
-                picture.src = `${dataPoke}`;
-                ctx.drawImage(pokeBall , 0 , 0);
-            
-                // var pokePicture =  document.getElementById("pokePicture");
-                // pokePicture.src = dataPoke;
-                // pokePicture.width = "200";
-
-
+                var img1 = new Image()
+                img1.src = `${dataPoke}`;
+                ctx.drawImage(img1, 10, 10);
+                // document.body.appendChild(img1);
             })
             .catch(err => console.log(err))
         }
-
         // this holds the brick in an array
         var bricks = [];
         // this creates the spots to hold the bricks rows and columns
@@ -100,7 +103,6 @@
                 bricks[column][row] = { x: 0, y: 0 };
             }
         }
-
         function drawBricks() {
             for(var column = 0; column < brickColumnCount; column++) {
                 for(var row = 0; row < brickRowCount; row++) {
@@ -119,41 +121,39 @@
                 }
             }
         }
-
-
         // getting image 
         function getBall() {
             pokeBall = new Image();
             pokeBall.src = 'pokeBall.png';
             ctx.drawImage(pokeBall, ballX, ballY);
         };
-
         function drawAsh() {
             ctx.beginPath();
             ctx.rect(ashStart, canvas.height-ashHeight, ashWidth, ashHeight);
-            ctx.fillStyle = "#0095DD";
+            ctx.strokeRect(ashStart, canvas.height-ashHeight, ashWidth, ashHeight);
+            ctx.fillStyle = "#FF0000";
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 5;
             ctx.fill();
             ctx.closePath();
         }
 
-
         // calls everything
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // getSprite();
             getBall();
+            
             drawBricks();
+            drawAsh();
+            
             ballX += horzBallShift;
             ballY += vertBallShift;
-
             if(ballX + horzBallShift > canvas.width - ballSize || ballX + horzBallShift < 0) {
                 horzBallShift = -horzBallShift;
             }
-
             if(ballY + vertBallShift + ballSize > canvas.height || ballY + vertBallShift < 0) {
                 vertBallShift = -vertBallShift;
             }
-
             if(rightPressed) {
                 ashStart += 7;
                 if (ashStart + ashWidth > canvas.width){
@@ -169,7 +169,7 @@
         }
         
         setInterval(draw, 10);
-    
+        
         draw();
     </script>
 </body>
