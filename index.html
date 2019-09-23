@@ -44,18 +44,23 @@
 
         // getting image 
         function getBall() {
-            const img = new Image();
-            img.src = './pokeBall.gif';
-            img.onload = () => {
-            context.drawImage(img, 0, 0);
-            };
-        }
+            // const img = new Image();
+            // img.src = './pokeBall.png';
+            // img.onload = () => {
+            // context.drawImage(img, 0, 0);
+            ctx.beginPath();
+            ctx.arc(50, 50, 10, 0, Math.PI*2);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        };
 
         // calls everything
         function draw() {
             getSprite();
             getBall();
         }
+        setInterval(draw, 10);
     
         draw();
     </script>
