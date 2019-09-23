@@ -131,7 +131,10 @@
         function drawAsh() {
             ctx.beginPath();
             ctx.rect(ashStart, canvas.height-ashHeight, ashWidth, ashHeight);
-            ctx.fillStyle = "#0095DD";
+            ctx.strokeRect(ashStart, canvas.height-ashHeight, ashWidth, ashHeight);
+            ctx.fillStyle = "#FF0000";
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 5;
             ctx.fill();
             ctx.closePath();
         }
@@ -143,6 +146,7 @@
             // getSprite();
             getBall();
             drawBricks();
+            drawAsh();
             ballX += horzBallShift;
             ballY += vertBallShift;
 
