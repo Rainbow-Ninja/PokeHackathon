@@ -9,10 +9,12 @@
     	* { padding: 0; margin: 50 0 0 0; }
     	canvas { background: url("https://i.imgur.com/SYY2mJz.png"); background-repeat: repeat; background-size: 700px 600px; display: block; margin: 0 auto; }
         body { background-color:rgb(180, 231, 106)}
+
     </style>
 </head>
 <body>
     <canvas id="myBoard" width="700" height="600"></canvas>
+
 
 
     <script>
@@ -66,13 +68,21 @@
             pokeApi()
             .then(data => {
                 const dataPoke = data.sprites.front_default;
-                var pokePicture =  document.getElementById("pokePicture");
-                pokePicture.src = dataPoke;
-                pokePicture.width = "200";
+                console.log(dataPoke)
+                ctx.drawImage()
+                picture = new Image();
+                picture.src = `${dataPoke}`;
+                ctx.drawImage(pokeBall , 0 , 0);
+            
+                // var pokePicture =  document.getElementById("pokePicture");
+                // pokePicture.src = dataPoke;
+                // pokePicture.width = "200";
+
 
             })
             .catch(err => console.log(err))
         }
+
 
         // getting image 
         function getBall() {
