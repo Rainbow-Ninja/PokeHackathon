@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <img id="pokePicture">
+    <script>
+    async function testPoke(){
+        let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${Math.round(Math.random() * 807)}`);
+        let data = await response.json()
+        return data;
+    }
+
+    testPoke()
+        .then(data => {
+            const dataPoke = data.sprites.front_default;
+            var pokePicture =  document.getElementById("pokePicture");
+            pokePicture.src = dataPoke;
+            pokePicture.width = "200";
+
+        })
+        .catch(err => console.log(err))
+    </script>
+    
+</body>
+</html>
