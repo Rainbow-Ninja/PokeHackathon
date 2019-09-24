@@ -52,8 +52,9 @@
         var brickWidth = 110;
         var brickHeight = 25;
         var brickPadding = 1;
-        var brickOffsetTop = 10;
+        var brickOffsetTop = 35;
         var brickOffsetLeft = 20;
+        var score = 0;
         
         document.addEventListener("keydown", keyDownHandler, false);
         document.addEventListener("keyup", keyUpHandler, false);
@@ -78,11 +79,23 @@
             for(var c = 0; c < brickColumnCount; c++) {
                 for(var r = 0; r < brickRowCount; r++) {
                     var b = bricks[c][r];
-                    if(ballX > b.ballX && ballX < b.ballX + brickWidth && ballY > b.ballY && ballY < b.ballY + brickHeight) {
-                        horzBallShift = -horzBallShift;
+
+                    if(b.status == 1) {
+                        if(ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
+                            vertBallShift = -vertBallShift;
+                            b.status = 0;
+                            score++;
+                        }
                     }
                 }
             }
+        }
+
+
+        function drawScore() {
+            ctx.font = "18px Arial";
+            ctx.fillStyle = "rgb(118, 161, 113)";
+            ctx.fillText("Score: "+score, 15, 25);
         }
 
         // grabbing the pokemon Api
@@ -109,31 +122,34 @@
         // this holds the brick in an array
         var bricks = [];
         // this creates the spots to hold the bricks rows and columns
-        for(var column=0; column < brickColumnCount; column++) {
+        for(var column = 0; column < brickColumnCount; column++) {
             bricks[column] = [];
             // we do the same for row
-            for(var row=0; row <brickRowCount; row ++) {
-                bricks[column][row] = { x: 0, y: 0 };
+            for(var row = 0; row < brickRowCount; row ++) {
+                bricks[column][row] = { x: 0, y: 0, status: 1 };
             }
         }
         function drawBricks() {
             for(var column = 0; column < brickColumnCount; column++) {
                 for(var row = 0; row < brickRowCount; row++) {
-                    var brickX = (column*(brickWidth+brickPadding))+brickOffsetLeft;
-                    var brickY = (row*(brickHeight+brickPadding))+brickOffsetTop;
-                    bricks[column][row].x = brickX;
-                    bricks[column][row].y = brickY;
-                    ctx.beginPath();
-                    ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                    var my_gradient = ctx.createLinearGradient(0, 0, 0, 170);
-                    my_gradient.addColorStop(0, "#654321");
-                    my_gradient.addColorStop(1, "#56391c");
-                    ctx.fillStyle = my_gradient;
-                    ctx.fill();
-                    ctx.closePath();
+                    if(bricks[column][row].status == 1) {
+                        var brickX = (column*(brickWidth+brickPadding))+brickOffsetLeft;
+                        var brickY = (row*(brickHeight+brickPadding))+brickOffsetTop;
+                        bricks[column][row].x = brickX;
+                        bricks[column][row].y = brickY;
+                        ctx.beginPath();
+                        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                        var my_gradient = ctx.createLinearGradient(0, 0, 0, 170);
+                        my_gradient.addColorStop(0.5, "#56391c");
+                        my_gradient.addColorStop(1, "#6E3E0E");
+                        ctx.fillStyle = my_gradient;
+                        ctx.fill();
+                        ctx.closePath();
+                    }
                 }
             }
         }
+
         // getting image 
         function getBall() {
             pokeBall = new Image();
@@ -158,6 +174,8 @@
             getSprite();
             drawBricks();
             drawAsh();
+            drawScore();
+            brickHits();
 
             ballX += horzBallShift;
             ballY += vertBallShift;
