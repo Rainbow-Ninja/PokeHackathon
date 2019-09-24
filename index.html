@@ -73,6 +73,18 @@
                 leftPressed = false;
             }
         }
+
+        function brickHits() {
+            for(var c = 0; c < brickColumnCount; c++) {
+                for(var r = 0; r < brickRowCount; r++) {
+                    var b = bricks[c][r];
+                    if(ballX > b.ballX && ballX < b.ballX + brickWidth && ballY > b.ballY && ballY < b.ballY + brickHeight) {
+                        horzBallShift = -horzBallShift;
+                    }
+                }
+            }
+        }
+
         // grabbing the pokemon Api
         async function pokeApi(){
         // pokemon api has 807 pokemons
