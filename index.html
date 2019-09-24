@@ -46,7 +46,7 @@
     </div>       
     
     <!-- <img id="sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/725.png" /> -->
-    
+    <button onclick="draw(); pokeApi();">START</button>
     <script>
         // setting up canvas
     	var canvas = document.getElementById("myBoard");
@@ -72,8 +72,9 @@
         var flag = true;
         var pokeName = null;
         var score = 0;
+        var displayScore = 0;
         var lives = 3;
-        
+
         document.addEventListener("keydown", keyDownHandler, false);
         document.addEventListener("keyup", keyUpHandler, false);
         function keyDownHandler(pressed) {
@@ -103,10 +104,16 @@
                             vertBallShift = -vertBallShift;
                             b.status = 0;
                             score++;
+                            displayScore++;
+                            if(score%10 == 0){
+                                horzBallShift++;
+                                vertBallShift++;
+                            }
+
                             if(score == brickRowCount*brickColumnCount) {
-                                alert(`Congrats! You caught ${pokeName}`);
+                                alert(`Congrats! You caught ${pokeName}. \nYou final score is ${displayScore}`);
                                 document.location.reload();
-                                clearInterval(interval); // Needed for Chrome to end game
+                                // clearInterval(interval); // Needed for Chrome to end game
                             }
                         }
                     }
@@ -117,7 +124,7 @@
         function drawScore() {
             ctx.font = "18px Arial";
             ctx.fillStyle = "rgb(118, 161, 113)";
-            ctx.fillText("Score: "+score, 15, 25);
+            ctx.fillText("Score: "+ displayScore, 15, 25);
         }
 
         function drawLives() {
@@ -205,7 +212,7 @@
             ctx.closePath();
         }
 
-        pokeApi();
+        // pokeApi();
 
         // calls everything
         function draw() {
@@ -232,16 +239,17 @@
                 } else {
                     lives--;
                     if(!lives) {
-                        alert("Oh no! The pokemon got away!");
+                        alert(`Oh no! The pokemon got away! \nYou final score is ${displayScore}`);
                         document.location.reload();
-                        clearInterval(interval); // Needed for Chrome to end game
+                        // clearInterval(interval); // Needed for Chrome to end game
                     }
                     else {
                         ballX = canvas.width/2;
                         ballY = canvas.height - 30;
-                        horzBallShift = 2;
-                        vertBallShift = -2;
+                        horzBallShift = 3;
+                        vertBallShift = -3;
                         ashStart = (canvas.width - ashWidth)/2;
+                        displayScore = 0;
                     }
                 }
             }
@@ -257,12 +265,14 @@
                     ashStart = 0;
                 }
             }
+            requestAnimationFrame(draw);
         }
         
 
-        var interval = setInterval(draw, 10);
+        // var interval = setInterval(draw, 10);
     
-        draw();
+        // draw();
+
     </script>
 </body>
 </html>
