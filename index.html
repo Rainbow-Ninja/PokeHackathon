@@ -7,11 +7,28 @@
     <title>Poke BreakOut</title>
     <style>
     	* { padding: 0; margin: 50 0 0 0; }
-    	canvas { background: url("https://i.imgur.com/SYY2mJz.png"); background-repeat: repeat; background-size: 700px 600px; display: block; margin: 0 auto; }
-        body { background-color:rgb(180, 231, 106)}
+    	#myBoard {background-repeat: repeat; background-size: 700px 600px; display: block; margin: 0 auto; z-index: -3;  }
+        body { background-color:rgb(135, 138, 132)}
+        .sprite-position {
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            left: 35%;
+            width: 100px;
+            height: 100px;
+            /* background-color: red; */
+        }
+        #blip {
+            position: absolute;
+            z-index: -1;
+            margin-left: 26.7%;
+        }
     </style>
 </head>
 <body>
+    <div id="blip">
+        <img src="https://i.imgur.com/SYY2mJz.png" height="600" width="700">
+    </div>
     <!-- <div style="display:none;">
         <img id="source"
                 src="https://mdn.mozillademos.org/files/5397/rhino.jpg"
@@ -19,20 +36,16 @@
     </div>
     <canvas id="canvas"></canvas> -->
 
-    <canvas id="myBoard" width="700" height="600"></canvas>
-
-
-
+    <canvas id="myBoard" width="700" height="600">
+                
+    </canvas>
+    <div class="sprite-position">
+            <img id="sprite" src="" width="500" height="300" />
+    </div>       
+    
+    <!-- <img id="sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/725.png" /> -->
+    
     <script>
-        //         const canvas = document.getElementById('canvas');
-        // const ctx = canvas.getContext('2d');
-        // const image = document.getElementById('source');
-        // console.log(image.src)
-
-        // image.addEventListener('load', e => {
-        //   ctx.drawImage(image.src, 33, 71, 104, 124, 21, 20, 87, 104);
-        // });
-
         // setting up canvas
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
@@ -54,6 +67,7 @@
         var brickPadding = 1;
         var brickOffsetTop = 35;
         var brickOffsetLeft = 20;
+        var flag = true;
         var score = 0;
         
         document.addEventListener("keydown", keyDownHandler, false);
@@ -100,24 +114,29 @@
 
         // grabbing the pokemon Api
         async function pokeApi(){
-        // pokemon api has 807 pokemons
-        // Math.round(Math.random() * 807)
-        let response = await fetch(`https://pokeapi.co/api/v2/pokemon/ditto/`);
-        let data = await response.json()
-        return data;
-        }
-        // function for pokemon sprite
-        function getSprite(){
-            pokeApi()
-            .then(data => {
-                var dataPoke = data.sprites.front_default;
-                console.log(dataPoke)
-                var img1 = new Image()
-                img1.src = `${dataPoke}`;
-                ctx.drawImage(img1, 10, 10);
-                // document.body.appendChild(img1);
-            })
-            .catch(err => console.log(err))
+            // pokemon api has 807 pokemons
+            console.log(`flag before: ${flag}`)
+            if(flag == true){
+                try{
+                    let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${Math.round(Math.random() * 807)}`);
+                    console.log(`res: ${response}`)
+                    let data = await response.json()
+                    console.log(`data: ${data}`);
+                    var dataPoke = data.sprites.front_default;
+                    console.log(`datapoke: ${dataPoke}`)
+                    var img1 = document.getElementById("sprite")
+                    // var img1 = new Image();
+                    img1.src = `${dataPoke}`;
+                    console.log(img1)
+                    console.log(`img1: ${img1}`)
+                    ctx.drawImage(img1, 100, 100);
+                    flag = false;
+                } catch(err){
+                    console.log(err);
+                }
+             
+            }   
+          return;
         }
         // this holds the brick in an array
         var bricks = [];
@@ -128,6 +147,12 @@
             for(var row = 0; row < brickRowCount; row ++) {
                 bricks[column][row] = { x: 0, y: 0, status: 1 };
             }
+        }
+        function drawSprite() {
+            var div = document.createElement("div");
+            div.classList.add("sprite-position")
+            document.body.appendChild(div);
+
         }
         function drawBricks() {
             for(var column = 0; column < brickColumnCount; column++) {
@@ -166,12 +191,13 @@
             ctx.fill();
             ctx.closePath();
         }
-
+        pokeApi();
         // calls everything
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             getBall();
-            getSprite();
+            // pokeApi();
+            // drawSprite();
             drawBricks();
             drawAsh();
             drawScore();
