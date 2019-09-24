@@ -12,8 +12,8 @@
         .sprite-position {
             position: absolute;
             z-index: -1;
-            top: 0;
-            left: 35%;
+            top: 2.5%;
+            left: 40%;
             width: 100px;
             height: 100px;
             /* background-color: red; */
@@ -21,10 +21,12 @@
         #blip {
             position: absolute;
             z-index: -1;
+           
         }
         #blip img{
             height: 85vh;
-            width: 45%;
+            width: 37%;
+            border: 5px solid #2d2f2c;
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -180,8 +182,8 @@
                         ctx.rect(brickX, brickY, brickWidth, brickHeight);
                         ctx.strokeRect(brickX, brickY, brickWidth, brickHeight);
                         var my_gradient = ctx.createLinearGradient(0, 0, 0, 170);
-                        my_gradient.addColorStop(0.5, "#56391c");
-                        my_gradient.addColorStop(1, "#6E3E0E");
+                        my_gradient.addColorStop(0, "#56391c");
+                        my_gradient.addColorStop(1, "#ECB753");
                         ctx.fillStyle = my_gradient;
                         ctx.strokeStyle = "#000000";
                         ctx.fill();
