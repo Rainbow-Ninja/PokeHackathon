@@ -64,7 +64,7 @@
         var brickColumnCount = 6;
         var brickWidth = 110;
         var brickHeight = 25;
-        var brickPadding = 1;
+        var brickPadding = 2;
         var brickOffsetTop = 35;
         var brickOffsetLeft = 20;
         var flag = true;
@@ -164,10 +164,12 @@
                         bricks[column][row].y = brickY;
                         ctx.beginPath();
                         ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                        ctx.strokeRect(brickX, brickY, brickWidth, brickHeight);
                         var my_gradient = ctx.createLinearGradient(0, 0, 0, 170);
                         my_gradient.addColorStop(0.5, "#56391c");
                         my_gradient.addColorStop(1, "#6E3E0E");
                         ctx.fillStyle = my_gradient;
+                        ctx.strokeStyle = "#000000";
                         ctx.fill();
                         ctx.closePath();
                     }
@@ -213,7 +215,7 @@
             if(ballY + vertBallShift < 0) {
                 vertBallShift = -vertBallShift;
             } else if(ballY + ballSize + vertBallShift > canvas.height) {
-                if(ballX > ashStart && ballX < ashStart + ashWidth) {
+                if(ballX > ashStart - 20 && ballX < ashStart + ashWidth + 15) {
                     vertBallShift = -vertBallShift;
                 } else {
                     alert("Your Pokemon Got Away!!");
