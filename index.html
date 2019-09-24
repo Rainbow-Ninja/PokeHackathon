@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Poke BreakOut</title>
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/1a05a3d46a.js" crossorigin="anonymous"></script>
     <style>
     	* { padding: 0; margin: 50 0 0 0; }
     	#myBoard {background-repeat: repeat; background-size: 700px 600px; display: block; margin: 0 auto; z-index: -3;  }
@@ -12,8 +14,8 @@
         .sprite-position {
             position: absolute;
             z-index: -1;
-            top: 2.5%;
-            left: 40%;
+            top: 5%;
+            left: 37%;
             width: 100px;
             height: 100px;
             /* background-color: red; */
@@ -24,12 +26,17 @@
            
         }
         #blip img{
-            height: 85vh;
+
+            height: 90vh;
             width: 40%;
-            border: 5px solid #746966;
+            border: 5px solid #2d2f2c;
             display: block;
             margin-left: auto;
             margin-right: auto;
+        }   
+
+        .fa-power-off{
+            color: #7d7270;
         }
     </style>
 </head>
@@ -37,21 +44,18 @@
     <div id="blip">
         <img src="https://i.imgur.com/SYY2mJz.png">
     </div>
-    <!-- <div style="display:none;">
-        <img id="source"
-                src="https://mdn.mozillademos.org/files/5397/rhino.jpg"
-                width="300" height="227">
-    </div>
-    <canvas id="canvas"></canvas> -->
 
-    <canvas id="myBoard" width="700" height="600">
-                
-    </canvas>
-    <div class="sprite-position">
-            <img id="sprite" src="" width="500" height="300" />
-    </div>       
+    <canvas id="myBoard" width="700" height="600"> </canvas>
     
-    <!-- <img id="sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/725.png" /> -->
+    <div class="sprite-position">
+        <img id="sprite" width="500" height="250"/>
+    </div>       
+
+
+    
+    <!-- <button onclick="draw(); pokeApi();"><i class="fas fa-power-off"></i></button> -->
+
+    <a onclick="draw(); pokeApi();"><i class="fas fa-power-off fa-3x"></i></a>
     
     <script>
         // setting up canvas
@@ -63,8 +67,8 @@
         var ashWidth = 100;
         var ballX = canvas.width/2;
         var ballY = canvas.height - ballSize - ashHeight;
-        var horzBallShift = 2;
-        var vertBallShift = -2;
+        var horzBallShift = 5;
+        var vertBallShift = -5;
         var ashStart = (canvas.width-ashWidth) / 2;
         var rightPressed = false;
         var leftPressed = false;
@@ -78,8 +82,9 @@
         var flag = true;
         var pokeName = null;
         var score = 0;
+        var displayScore = 0;
         var lives = 3;
-        
+
         document.addEventListener("keydown", keyDownHandler, false);
         document.addEventListener("keyup", keyUpHandler, false);
         function keyDownHandler(pressed) {
@@ -109,10 +114,16 @@
                             vertBallShift = -vertBallShift;
                             b.status = 0;
                             score++;
+                            displayScore++;
+                            if(score%10 == 0){
+                                horzBallShift++;
+                                vertBallShift++;
+                            }
+
                             if(score == brickRowCount*brickColumnCount) {
-                                alert(`Congrats! You caught ${pokeName}`);
+                                alert(`Congrats! You caught ${pokeName}. \nYou final score is ${displayScore}`);
                                 document.location.reload();
-                                clearInterval(interval); // Needed for Chrome to end game
+                                // clearInterval(interval); // Needed for Chrome to end game
                             }
                         }
                     }
@@ -123,7 +134,7 @@
         function drawScore() {
             ctx.font = "18px Arial";
             ctx.fillStyle = "rgb(118, 161, 113)";
-            ctx.fillText("Score: "+score, 15, 25);
+            ctx.fillText("Score: "+ displayScore, 15, 25);
         }
 
         function drawLives() {
@@ -193,7 +204,7 @@
             }
         }
 
-        // getting image 
+        // getting ball image 
         function getBall() {
             pokeBall = new Image();
             pokeBall.src = 'pokeBall.png';
@@ -211,7 +222,7 @@
             ctx.closePath();
         }
 
-        pokeApi();
+        // pokeApi();
 
         // calls everything
         function draw() {
@@ -238,16 +249,17 @@
                 } else {
                     lives--;
                     if(!lives) {
-                        alert("Oh no! The pokemon got away!");
+                        alert(`Oh no! The pokemon got away! \nYou final score is ${displayScore}`);
                         document.location.reload();
-                        clearInterval(interval); // Needed for Chrome to end game
+                        // clearInterval(interval); // Needed for Chrome to end game
                     }
                     else {
                         ballX = canvas.width/2;
                         ballY = canvas.height - 30;
-                        horzBallShift = 2;
-                        vertBallShift = -2;
+                        horzBallShift = 5;
+                        vertBallShift = -5;
                         ashStart = (canvas.width - ashWidth)/2;
+                        displayScore = 0;
                     }
                 }
             }
@@ -263,12 +275,14 @@
                     ashStart = 0;
                 }
             }
+            requestAnimationFrame(draw);
         }
         
 
-        var interval = setInterval(draw, 10);
+        // var interval = setInterval(draw, 10);
     
-        draw();
+        // draw();
+
     </script>
 </body>
 </html>
