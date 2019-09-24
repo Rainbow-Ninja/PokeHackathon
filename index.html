@@ -36,13 +36,15 @@
         // setting up canvas
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
+
+
         var ballX = canvas.width/2;
-        var ballY = canvas.height-30;
+        var ballY = canvas.height - 30;
         var horzBallShift = 2;
         var vertBallShift = -2;
         var ballSize = 32;
-        var ashHeight = 10;
-        var ashWidth = 75;
+        var ashHeight = 15;
+        var ashWidth = 100;
         var ashStart = (canvas.width-ashWidth) / 2;
         var rightPressed = false;
         var leftPressed = false;
@@ -72,6 +74,21 @@
                 leftPressed = false;
             }
         }
+
+        function brickHits() {
+            for(var c = 0; c < brickColumnCount; c++) {
+                for(var r = 0; r < brickRowCount; r++) {
+                    var b = bricks[c][r];
+                    if(b.status == 1) {
+                        if(ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
+                            vertBallShift = -vertBallShift;
+                            b.status = 0;
+                        }
+                    }
+                }
+            }
+        }
+
         // grabbing the pokemon Api
         async function pokeApi(){
         // pokemon api has 807 pokemons
@@ -96,31 +113,34 @@
         // this holds the brick in an array
         var bricks = [];
         // this creates the spots to hold the bricks rows and columns
-        for(var column=0; column < brickColumnCount; column++) {
+        for(var column = 0; column < brickColumnCount; column++) {
             bricks[column] = [];
             // we do the same for row
-            for(var row=0; row <brickRowCount; row ++) {
-                bricks[column][row] = { x: 0, y: 0 };
+            for(var row = 0; row < brickRowCount; row ++) {
+                bricks[column][row] = { x: 0, y: 0, status: 1 };
             }
         }
         function drawBricks() {
             for(var column = 0; column < brickColumnCount; column++) {
                 for(var row = 0; row < brickRowCount; row++) {
-                    var brickX = (column*(brickWidth+brickPadding))+brickOffsetLeft;
-                    var brickY = (row*(brickHeight+brickPadding))+brickOffsetTop;
-                    bricks[column][row].x = brickX;
-                    bricks[column][row].y = brickY;
-                    ctx.beginPath();
-                    ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                    var my_gradient = ctx.createLinearGradient(0, 0, 0, 170);
-                    my_gradient.addColorStop(0, "#654321");
-                    my_gradient.addColorStop(1, "#56391c");
-                    ctx.fillStyle = my_gradient;
-                    ctx.fill();
-                    ctx.closePath();
+                    if(bricks[column][row].status == 1) {
+                        var brickX = (column*(brickWidth+brickPadding))+brickOffsetLeft;
+                        var brickY = (row*(brickHeight+brickPadding))+brickOffsetTop;
+                        bricks[column][row].x = brickX;
+                        bricks[column][row].y = brickY;
+                        ctx.beginPath();
+                        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                        var my_gradient = ctx.createLinearGradient(0, 0, 0, 170);
+                        my_gradient.addColorStop(0.5, "#56391c");
+                        my_gradient.addColorStop(1, "#6E3E0E");
+                        ctx.fillStyle = my_gradient;
+                        ctx.fill();
+                        ctx.closePath();
+                    }
                 }
             }
         }
+
         // getting image 
         function getBall() {
             pokeBall = new Image();
@@ -129,8 +149,8 @@
         };
         function drawAsh() {
             ctx.beginPath();
-            ctx.rect(ashStart, canvas.height-ashHeight, ashWidth, ashHeight);
-            ctx.strokeRect(ashStart, canvas.height-ashHeight, ashWidth, ashHeight);
+            ctx.rect(ashStart, canvas.height - ashHeight, ashWidth, ashHeight);
+            ctx.strokeRect(ashStart, canvas.height - ashHeight, ashWidth, ashHeight);
             ctx.fillStyle = "#FF0000";
             ctx.strokeStyle = "#000000";
             ctx.lineWidth = 5;
@@ -145,14 +165,25 @@
             getSprite();
             drawBricks();
             drawAsh();
+            brickHits();
 
             ballX += horzBallShift;
             ballY += vertBallShift;
             if(ballX + horzBallShift > canvas.width - ballSize || ballX + horzBallShift < 0) {
                 horzBallShift = -horzBallShift;
             }
-            if(ballY + vertBallShift + ballSize > canvas.height || ballY + vertBallShift < 0) {
+
+            // if the ball hits the roof, else the ball hits the floor
+            if(ballY + vertBallShift < 0) {
                 vertBallShift = -vertBallShift;
+            } else if(ballY + ballSize + vertBallShift > canvas.height) {
+                if(ballX > ashStart && ballX < ashStart + ashWidth) {
+                    vertBallShift = -vertBallShift;
+                } else {
+                    alert("Your Pokemon Got Away!!");
+                    document.location.reload();
+                    clearInterval(interval); // Needed for Chrome to end game
+                }
             }
             if(rightPressed) {
                 ashStart += 7;
@@ -168,8 +199,9 @@
             }
         }
         
-        setInterval(draw, 10);
-        
+
+        var interval = setInterval(draw, 10);;
+    
         draw();
     </script>
 </body>
