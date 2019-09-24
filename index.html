@@ -29,7 +29,7 @@
 
             height: 90vh;
             width: 40%;
-            border: 5px solid #2d2f2c;
+            border: 5px solid #7d7270;
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -38,11 +38,17 @@
         .fa-power-off{
             color: #7d7270;
         }
+        a{ display: block; text-align: center; margin-top: -70px;}
+        a i:hover{
+            color: black;
+            transition: width 2s;
+        }
     </style>
 </head>
 <body>
     <div id="blip">
         <img src="https://i.imgur.com/SYY2mJz.png">
+        <a onclick="draw(); pokeApi();"><i class="fas fa-power-off fa-3x"></i></a>
     </div>
 
     <canvas id="myBoard" width="700" height="600"> </canvas>
@@ -51,11 +57,6 @@
         <img id="sprite" width="500" height="250"/>
     </div>       
 
-
-    
-    <!-- <button onclick="draw(); pokeApi();"><i class="fas fa-power-off"></i></button> -->
-
-    <a onclick="draw(); pokeApi();"><i class="fas fa-power-off fa-3x"></i></a>
     
     <script>
         // setting up canvas
@@ -263,13 +264,13 @@
                 }
             }
             if(rightPressed) {
-                ashStart += 7;
+                ashStart += 9;
                 if (ashStart + ashWidth > canvas.width){
                     ashStart = canvas.width - ashWidth;
                 }
             }
             else if(leftPressed) {
-                ashStart -= 7;
+                ashStart -= 9;
                 if (ashStart < 0){
                     ashStart = 0;
                 }
