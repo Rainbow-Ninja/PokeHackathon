@@ -37,14 +37,13 @@
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
 
-
-        var ballX = canvas.width/2;
-        var ballY = canvas.height - 30;
-        var horzBallShift = 2;
-        var vertBallShift = -2;
         var ballSize = 32;
         var ashHeight = 15;
         var ashWidth = 100;
+        var ballX = canvas.width/2;
+        var ballY = canvas.height - ballSize - ashHeight;
+        var horzBallShift = 2;
+        var vertBallShift = -2;
         var ashStart = (canvas.width-ashWidth) / 2;
         var rightPressed = false;
         var leftPressed = false;
@@ -80,6 +79,7 @@
             for(var c = 0; c < brickColumnCount; c++) {
                 for(var r = 0; r < brickRowCount; r++) {
                     var b = bricks[c][r];
+
                     if(b.status == 1) {
                         if(ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
                             vertBallShift = -vertBallShift;
@@ -90,6 +90,7 @@
                 }
             }
         }
+
 
         function drawScore() {
             ctx.font = "18px Arial";
