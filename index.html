@@ -53,8 +53,9 @@
         var brickWidth = 110;
         var brickHeight = 25;
         var brickPadding = 1;
-        var brickOffsetTop = 10;
+        var brickOffsetTop = 35;
         var brickOffsetLeft = 20;
+        var score = 0;
         
         document.addEventListener("keydown", keyDownHandler, false);
         document.addEventListener("keyup", keyUpHandler, false);
@@ -83,10 +84,17 @@
                         if(ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
                             vertBallShift = -vertBallShift;
                             b.status = 0;
+                            score++;
                         }
                     }
                 }
             }
+        }
+
+        function drawScore() {
+            ctx.font = "18px Arial";
+            ctx.fillStyle = "rgb(118, 161, 113)";
+            ctx.fillText("Score: "+score, 15, 25);
         }
 
         // grabbing the pokemon Api
@@ -165,6 +173,7 @@
             getSprite();
             drawBricks();
             drawAsh();
+            drawScore();
             brickHits();
 
             ballX += horzBallShift;
