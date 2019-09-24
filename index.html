@@ -10,7 +10,7 @@
     <style>
     	* { padding: 0; margin: 50 0 0 0; }
     	#myBoard {background-repeat: repeat; background-size: 700px 600px; display: block; margin: 0 auto; z-index: -3;  }
-        body { background-color:#bbb6b0}
+        body { background-image: url(wholepoke.jpg);  background-repeat: no-repeat; background-size: 100vw 100vh ;}
         .sprite-position {
             position: absolute;
             z-index: -1;
@@ -26,15 +26,14 @@
            
         }
         #blip img{
-
             height: 90vh;
             width: 40%;
-            border: 5px solid #7d7270;
+            border: 10px solid limegreen;
             display: block;
             margin-left: auto;
             margin-right: auto;
+            border-radius: 20px;
         }   
-
         .fa-power-off{
             color: #7d7270;
         }
@@ -43,12 +42,26 @@
             color: black;
             transition: width 2s;
         }
+        .button {
+            background-color:limegreen  ;
+            border: none;
+            color: white  ;
+            font-weight: bold;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            }
     </style>
 </head>
 <body>
     <div id="blip">
         <img src="https://i.imgur.com/SYY2mJz.png">
-        <a onclick="draw(); pokeApi();"><i class="fas fa-power-off fa-3x"></i></a>
+        <a onclick="draw(); pokeApi();"><button class="button">START</button></a>
     </div>
 
     <canvas id="myBoard" width="700" height="600"> </canvas>
@@ -62,7 +75,6 @@
         // setting up canvas
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
-
         var ballSize = 32;
         var ashHeight = 15;
         var ashWidth = 100;
@@ -85,9 +97,16 @@
         var score = 0;
         var displayScore = 0;
         var lives = 3;
+        
 
         document.addEventListener("keydown", keyDownHandler, false);
         document.addEventListener("keyup", keyUpHandler, false);
+
+
+        
+
+
+
         function keyDownHandler(pressed) {
             if(pressed.key == "Right" || pressed.key == "ArrowRight") {
                 rightPressed = true;
@@ -109,7 +128,6 @@
             for(var c = 0; c < brickColumnCount; c++) {
                 for(var r = 0; r < brickRowCount; r++) {
                     var b = bricks[c][r];
-
                     if(b.status == 1) {
                         if(ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
                             vertBallShift = -vertBallShift;
@@ -120,7 +138,6 @@
                                 horzBallShift++;
                                 vertBallShift++;
                             }
-
                             if(score == brickRowCount*brickColumnCount) {
                                 alert(`Congrats! You caught ${pokeName}. \nYou final score is ${displayScore}`);
                                 document.location.reload();
@@ -130,19 +147,16 @@
                 }
             }
         }
-
         function drawScore() {
             ctx.font = "18px Arial";
             ctx.fillStyle = "rgb(118, 161, 113)";
             ctx.fillText("Score: "+ displayScore, 15, 25);
         }
-
         function drawLives() {
             ctx.font = "18px Arial";
             ctx.fillStyle = "rgb(118, 161, 113)";
             ctx.fillText("Lives: "+ lives, canvas.width - 65, 25);
         }
-
         // grabbing the pokemon Api
         async function pokeApi(){
             // pokemon api has 807 pokemons
@@ -164,7 +178,6 @@
             }   
           return;
         }
-
         // this holds the brick in an array
         var bricks = [];
         // this creates the spots to hold the bricks rows and columns
@@ -174,13 +187,11 @@
                 bricks[column][row] = { x: 0, y: 0, status: 1 };
             }
         }
-
         function drawSprite() {
             var div = document.createElement("div");
             div.classList.add("sprite-position")
             document.body.appendChild(div);
         }
-
         function drawBricks() {
             for(var column = 0; column < brickColumnCount; column++) {
                 for(var row = 0; row < brickRowCount; row++) {
@@ -203,14 +214,12 @@
                 }
             }
         }
-
         // getting ball image 
         function getBall() {
             pokeBall = new Image();
             pokeBall.src = 'pokeBall.png';
             ctx.drawImage(pokeBall, ballX, ballY);
         };
-
         function drawAsh() {
             ctx.beginPath();
             ctx.rect(ashStart, canvas.height - ashHeight, ashWidth, ashHeight);
@@ -221,9 +230,7 @@
             ctx.fill();
             ctx.closePath();
         }
-
         // pokeApi();
-
         // calls everything
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -233,13 +240,11 @@
             drawScore();
             drawLives();
             brickHits();
-
             ballX += horzBallShift;
             ballY += vertBallShift;
             if(ballX + horzBallShift > canvas.width - ballSize || ballX + horzBallShift < 0) {
                 horzBallShift = -horzBallShift;
             }
-
             // if the ball hits the roof, else the ball hits the floor
             if(ballY + vertBallShift < 0) {
                 vertBallShift = -vertBallShift;
@@ -278,11 +283,9 @@
             requestAnimationFrame(draw);
         }
         
-
         // var interval = setInterval(draw, 10);
     
         // draw();
-
     </script>
 </body>
 </html>
