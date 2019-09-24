@@ -22,13 +22,13 @@
     	var canvas = document.getElementById("myBoard");
         var ctx = canvas.getContext("2d");
 
+        var ballSize = 32;
+        var ashHeight = 15;
+        var ashWidth = 100;
         var ballX = canvas.width/2;
-        var ballY = canvas.height-30;
+        var ballY = canvas.height - ballSize - ashHeight;
         var horzBallShift = 2;
         var vertBallShift = -2;
-        var ballSize = 32;
-        var ashHeight = 10;
-        var ashWidth = 75;
         var ashStart = (canvas.width-ashWidth) / 2;
         var rightPressed = false;
         var leftPressed = false;
@@ -130,8 +130,8 @@
 
         function drawAsh() {
             ctx.beginPath();
-            ctx.rect(ashStart, canvas.height-ashHeight, ashWidth, ashHeight);
-            ctx.strokeRect(ashStart, canvas.height-ashHeight, ashWidth, ashHeight);
+            ctx.rect(ashStart, canvas.height - ashHeight, ashWidth, ashHeight);
+            ctx.strokeRect(ashStart, canvas.height - ashHeight, ashWidth, ashHeight);
             ctx.fillStyle = "#FF0000";
             ctx.strokeStyle = "#000000";
             ctx.lineWidth = 5;
@@ -154,10 +154,18 @@
                 horzBallShift = -horzBallShift;
             }
 
-            if(ballY + vertBallShift + ballSize > canvas.height || ballY + vertBallShift < 0) {
+            // if the ball hits the roof, else the ball hits the floor
+            if(ballY + vertBallShift < 0) {
                 vertBallShift = -vertBallShift;
+            } else if(ballY + ballSize + vertBallShift > canvas.height) {
+                if(ballX > ashStart && ballX < ashStart + ashWidth) {
+                    vertBallShift = -vertBallShift;
+                } else {
+                    alert("Your Pokemon Got Away!!");
+                    document.location.reload();
+                    clearInterval(interval); // Needed for Chrome to end game
+                }
             }
-
             if(rightPressed) {
                 ashStart += 7;
                 if (ashStart + ashWidth > canvas.width){
@@ -172,7 +180,7 @@
             }
         }
         
-        setInterval(draw, 10);
+        var interval = setInterval(draw, 10);;
     
         draw();
     </script>
