@@ -41,10 +41,12 @@
             transition: width 2s;
         }
         .button {
+
             background-color:limegreen  ;
             border: none;
             color: rgba(255, 255, 255, 0.7);
             font-weight: bold;
+
             padding: 15px 32px;
             text-align: center;
             text-decoration: none;
@@ -53,6 +55,7 @@
             font-size: 16px;
             margin: 4px 2px;
             cursor: pointer;
+
         }
         #music {
             margin-top: -50px;
@@ -87,6 +90,7 @@
     <div id="blip">
         <img src="https://i.imgur.com/SYY2mJz.png">
         <a onclick="draw(); pokeApi();"><button class="button">START</button></a>
+
             <div id="music">
                 <h3><u>Music control</u></h3>
                 <button onclick="document.getElementById('player').play()">Play</button> 
@@ -94,6 +98,7 @@
                 <button onclick="document.getElementById('player').volume += 0.1">Vol +</button> 
                 <button onclick="document.getElementById('player').volume -= 0.1">Vol -</button> 
             </div>
+
     </div>
 
     <canvas id="myBoard" width="700" height="600"> </canvas>
